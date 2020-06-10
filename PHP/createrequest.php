@@ -40,7 +40,7 @@ if (isset($_REQUEST['quote'])) {
     }
     $_SESSION['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
     $_SESSION['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
-    header('Location: quoterequest.php?xl='.encode(session_id()));       
+    header('Location: createresponse.php?xl='.encode(session_id()));       
     }
 
 ?>
