@@ -7,7 +7,11 @@ require 'header.php';
 //Configuration
 $wsdl = "../SCHEMA-WSDLs/RateWS.wsdl";
 $operation = "ProcessRate";
-$endpointurl = 'https://onlinetools.ups.com/webservices/Rate';   //  https://wwwcie.ups.com/webservices/Rate';
+if ($developmodel == "test") {
+    $endpointurl = 'https://wwwcie.ups.com/webservices/Ship';
+} else {
+    $endpointurl = 'https://onlinetools.ups.com/webservices/Ship';
+}
 $outputFileName = "lastresponse.xml";
 $outputFileName_reqest = "lastrequest.xml";
 

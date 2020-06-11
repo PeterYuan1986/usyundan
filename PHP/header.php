@@ -16,6 +16,7 @@ session_start();
 $access = "1D7F00B3B06A9135";
 $userid = "elephxp";
 $passwd = "ABC123efg@";
+$developmodel="test";      //"prod" or "test" model
 
 function encode($url){
    return base64_encode("yhy".$url);    

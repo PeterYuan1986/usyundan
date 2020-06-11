@@ -8,39 +8,39 @@ session_id(time());
 session_start();
 
 if (isset($_REQUEST['quote'])) {
-    $_SESSION['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];
-    $_SESSION['SHIP_REQUEST']['namefrom'] = @$_POST["namefrom"];
-    $_SESSION['SHIP_REQUEST']['ads1from'] = @$_POST["ads1from"];
-    $_SESSION['SHIP_REQUEST']['ads2from'] = @$_POST["ads2from"];
-    $_SESSION['SHIP_REQUEST']['ads3from'] = @$_POST["ads3from"];
-    $_SESSION['SHIP_REQUEST']['ads1to'] = @$_POST["ads1to"];
-    $_SESSION['SHIP_REQUEST']['ads2to'] = @$_POST["ads2to"];
-    $_SESSION['SHIP_REQUEST']['ads3to'] = @$_POST["ads3to"];
-    $_SESSION['SHIP_REQUEST']['cityfrom'] = @$_POST["cityfrom"];
-    $_SESSION['SHIP_REQUEST']['cityto'] = @$_POST["cityto"];
-    $_SESSION['SHIP_REQUEST']['statefrom'] = @$_POST["statefrom"];
-    $_SESSION['SHIP_REQUEST']['stateto'] = @$_POST["stateto"];
-    $_SESSION['SHIP_REQUEST']['weight'] = @$_POST["weight"];
-    $_SESSION['SHIP_REQUEST']['phonefrom'] = @$_POST["phonefrom"];
-    $_SESSION['SHIP_REQUEST']['phoneto'] = @$_POST["phoneto"];
+    $_SESSION['AV']['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];
+    $_SESSION['AV']['SHIP_REQUEST']['namefrom'] = @$_POST["namefrom"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads1from'] = @$_POST["ads1from"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads2from'] = @$_POST["ads2from"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads3from'] = @$_POST["ads3from"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads1to'] = @$_POST["ads1to"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads2to'] = @$_POST["ads2to"];
+    $_SESSION['AV']['SHIP_REQUEST']['ads3to'] = @$_POST["ads3to"];
+    $_SESSION['AV']['SHIP_REQUEST']['cityfrom'] = @$_POST["cityfrom"];
+    $_SESSION['AV']['SHIP_REQUEST']['cityto'] = @$_POST["cityto"];
+    $_SESSION['AV']['SHIP_REQUEST']['statefrom'] = @$_POST["statefrom"];
+    $_SESSION['AV']['SHIP_REQUEST']['stateto'] = @$_POST["stateto"];
+    $_SESSION['AV']['SHIP_REQUEST']['weight'] = @$_POST["weight"];
+    $_SESSION['AV']['SHIP_REQUEST']['phonefrom'] = @$_POST["phonefrom"];
+    $_SESSION['AV']['SHIP_REQUEST']['phoneto'] = @$_POST["phoneto"];
     if (@$_POST["length"] == '') {
-        $_SESSION['SHIP_REQUEST']['length'] = '1';
+        $_SESSION['AV']['SHIP_REQUEST']['length'] = '1';
     } else {
-        $_SESSION['SHIP_REQUEST']['length'] = @$_POST["length"];
+        $_SESSION['AV']['SHIP_REQUEST']['length'] = @$_POST["length"];
     }
     if (@$_POST["width"] == '') {
-        $_SESSION['SHIP_REQUEST']['width'] = '1';
+        $_SESSION['AV']['SHIP_REQUEST']['width'] = '1';
     } else {
-        $_SESSION['SHIP_REQUEST']['width'] = @$_POST["width"];
+        $_SESSION['AV']['SHIP_REQUEST']['width'] = @$_POST["width"];
     }
     if (@$_POST["height"] == '') {
-        $_SESSION['SHIP_REQUEST']['height'] = '1';
+        $_SESSION['AV']['SHIP_REQUEST']['height'] = '1';
     } else {
-        $_SESSION['SHIP_REQUEST']['height'] = @$_POST["height"];
+        $_SESSION['AV']['SHIP_REQUEST']['height'] = @$_POST["height"];
     }
-    $_SESSION['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
-    $_SESSION['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
-    header('Location: createresponse.php?xl='.encode(session_id()));       
+    $_SESSION['AV']['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
+    $_SESSION['AV']['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
+    header('Location: addressValidation.php?xl='.encode(session_id()));       
     }
 
 ?>
@@ -153,7 +153,7 @@ if (isset($_REQUEST['quote'])) {
 
             </div>
             <div >
-                <a href="quoterequest.php"><input type="submit" name="quote" value="Quote">  </a>
+                <a href="#"><input type="submit" name="quote" value="Quote">  </a>
             </div>
         </form>
     </body>

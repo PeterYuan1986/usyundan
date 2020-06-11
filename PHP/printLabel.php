@@ -6,9 +6,13 @@ require 'header.php';
 //Configuration
 $wsdl = "../SCHEMA-WSDLs/Ship.wsdl";
 $operation = "ProcessShipment";
-$endpointurl = 'https://wwwcie.ups.com/webservices/Ship';
-$outputFileName = "XOLTResult.xml";
-$SHIP_REQUEST = $_SESSION['SHIP_REQUEST'];
+if ($developmodel == "test") {
+    $endpointurl = 'https://wwwcie.ups.com/webservices/Ship';
+} else {
+    $endpointurl = 'https://onlinetools.ups.com/webservices/Ship';
+}
+$outputFileName = "ShipRequest.xml";
+$SHIP_REQUEST = $_SESSION['LABEL']['SHIP_REQUEST'];
 
 function processShipment($SHIP_REQUEST) {
     //create soap request
@@ -19,9 +23,9 @@ function processShipment($SHIP_REQUEST) {
     $shipper['AttentionName'] = $SHIP_REQUEST['namefrom'];
     $shipper['TaxIdentificationNumber'] = '123456';
     $shipper['ShipperNumber'] = '86F304 ';
-    $address['AddressLine'] =  $SHIP_REQUEST['ads1from'].", ".$SHIP_REQUEST['ads2from'].", ".$SHIP_REQUEST['ads3from'];
+    $address['AddressLine'] = $SHIP_REQUEST['ads1from'] . ", " . $SHIP_REQUEST['ads2from'] . ", " . $SHIP_REQUEST['ads3from'];
     $address['City'] = $SHIP_REQUEST['cityfrom'];
-    $address['StateProvinceCode'] =  $SHIP_REQUEST['statefrom'];
+    $address['StateProvinceCode'] = $SHIP_REQUEST['statefrom'];
     $address['PostalCode'] = $SHIP_REQUEST['zipcodefrom'];
     $address['CountryCode'] = 'US';
     $shipper['Address'] = $address;
@@ -30,25 +34,25 @@ function processShipment($SHIP_REQUEST) {
     $shipper['Phone'] = $phone;
     $shipment['Shipper'] = $shipper;
 
-    
-    
+
+
     $shipto['Name'] = $SHIP_REQUEST['nameto'];
     $shipto['AttentionName'] = $SHIP_REQUEST['nameto'];
-    $addressTo['AddressLine'] = array(  $SHIP_REQUEST['ads1to']." ".$SHIP_REQUEST['ads2to']." ".$SHIP_REQUEST['ads3to']);
-    $addressTo['City'] =  $SHIP_REQUEST['cityto'];
+    $addressTo['AddressLine'] = array($SHIP_REQUEST['ads1to'] . " " . $SHIP_REQUEST['ads2to'] . " " . $SHIP_REQUEST['ads3to']);
+    $addressTo['City'] = $SHIP_REQUEST['cityto'];
     $addressTo['PostalCode'] = $SHIP_REQUEST['zipcodeto'];
     $addressTo['StateProvinceCode'] = $SHIP_REQUEST['stateto'];
     $addressTo['CountryCode'] = 'US';
-    $phone2['Number'] =$SHIP_REQUEST['phoneto'];
+    $phone2['Number'] = $SHIP_REQUEST['phoneto'];
     $shipto['Address'] = $addressTo;
     $shipto['Phone'] = $phone2;
     $shipment['ShipTo'] = $shipto;
-     
-    
 
-    $shipfrom['Name'] =$SHIP_REQUEST['namefrom'];
+
+
+    $shipfrom['Name'] = $SHIP_REQUEST['namefrom'];
     $shipfrom['AttentionName'] = $SHIP_REQUEST['namefrom'];
-    $addressFrom['AddressLine'] = $SHIP_REQUEST['ads1from'].$SHIP_REQUEST['ads2from'].$SHIP_REQUEST['ads3from'];
+    $addressFrom['AddressLine'] = $SHIP_REQUEST['ads1from'] . $SHIP_REQUEST['ads2from'] . $SHIP_REQUEST['ads3from'];
     $addressFrom['City'] = $SHIP_REQUEST['cityfrom'];
     $addressFrom['StateProvinceCode'] = $SHIP_REQUEST['statefrom'];
     $addressFrom['PostalCode'] = $SHIP_REQUEST['zipcodefrom'];
@@ -56,9 +60,9 @@ function processShipment($SHIP_REQUEST) {
     $phone3['Number'] = $SHIP_REQUEST['phonefrom'];
     $shipfrom['Address'] = $addressFrom;
     $shipfrom['Phone'] = $phone3;
-    $shipment['ShipFrom'] = $shipfrom;   
-    
-    
+    $shipment['ShipFrom'] = $shipfrom;
+
+
 
     $shipmentcharge['Type'] = '01';
     $creditcard['Type'] = '06';
@@ -148,9 +152,9 @@ function processShipment($SHIP_REQUEST) {
     $packageweight['Weight'] = $SHIP_REQUEST['weight'];
     $package['PackageWeight'] = $packageweight;
     $shipment['Package'] = $package;
-    
-    
-    
+
+
+
 
     $labelimageformat['Code'] = 'GIF';
     $labelimageformat['Description'] = 'GIF';
@@ -199,64 +203,40 @@ try {
     $header = new SoapHeader('http://www.ups.com/XMLSchema/XOLTWS/UPSS/v1.0', 'UPSSecurity', $upss);
     $client->__setSoapHeaders($header);
 
-    if (strcmp($operation, "ProcessShipment") == 0) {
-        //get response
-        $resp = $client->__soapCall('ProcessShipment', array(processShipment($SHIP_REQUEST)));
+//get response
+    $resp = $client->__soapCall('ProcessShipment', array(processShipment($SHIP_REQUEST)));
 
-        //get status
-        //echo "Response Status: " . $resp->Response->ResponseStatus->Description . "\n";
-        //save soap request and response to file
-        /*$fw = fopen($outputFileName, 'w');
-        fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
-        fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
-        fclose($fw);
-*/
-        $array = json_decode(json_encode($resp), true);
-        $shipping_num = $array['ShipmentResults']['ShipmentIdentificationNumber'];
-        $label_image = "label" . $shipping_num . ".gif";
-        $rotate_label_image = "rotate" . $shipping_num . ".gif";
-        
-        $source = imagecreatefromstring(base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['GraphicImage']));
-        imagejpeg($source, "../label/".$label_image, 100);
-        $rotate = imagerotate($source, 270, 0); // if want to rotate the image
-        imagejpeg($rotate,"../label/".$rotate_label_image, 100);
+    //get status
+    //echo "Response Status: " . $resp->Response->ResponseStatus->Description . "\n";
+    //save soap request and response to file
+    /* $fw = fopen($outputFileName, 'w');
+      fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
+      fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
+      fclose($fw);
+     */
+    $array = json_decode(json_encode($resp), true);
+    $shipping_num = $array['ShipmentResults']['ShipmentIdentificationNumber'];
+    $label_image = "label" . $shipping_num . ".gif";
+    $rotate_label_image = "rotate" . $shipping_num . ".gif";
 
-        /*$file = fopen($label_image, "w");
-        fwrite($file, base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['GraphicImage']));
-        fclose($file);*/
-
-        $HTMLImage = "label" . $shipping_num . ".html";
-        $file = fopen("../label/".$HTMLImage, "w");
-        fwrite($file, base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['HTMLImage']));
-        fclose($file);
-
-        //print"<img src=\"temp.gif\" width=\"100px\" height=\"100px\"\/>";
-    } else if (strcmp($operation, "ProcessShipConfirm") == 0) {
-        //get response
-        $resp = $client->__soapCall('ProcessShipConfirm', array(processShipConfirm()));
-
-        //get status
-        echo "Response Status: " . $resp->Response->ResponseStatus->Description . "\n";
-
-        //save soap request and response to file
-        $fw = fopen($outputFileName, 'w');
-        fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
-        fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
-        fclose($fw);
-    } else {
-        $resp = $client->__soapCall('ProcessShipeAccept', array(processShipAccept()));
-
-        //get status
-        // echo "Response Status: " . $resp->Response->ResponseStatus->Description . "\n";
-        //save soap request and response to file
-        /* $fw = fopen($outputFileName, 'w');
-          fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
-          fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
-          fclose($fw); */
+    $source = imagecreatefromstring(base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['GraphicImage']));
+    imagejpeg($source, "../label/" . $label_image, 100);
+    $rotate = imagerotate($source, 270, 0); // if want to rotate the image
+    imagejpeg($rotate, "../label/" . $rotate_label_image, 100);
 
 
-        $array = json_decode(json_encode($resp), true);
-    }
+
+    $HTMLImage = "label" . $shipping_num . ".html";
+    $file = fopen("../label/" . $HTMLImage, "w");
+    fwrite($file, base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['HTMLImage']));
+    fclose($file);
+
+    $fw = fopen("../label/" . $outputFileName, 'w');
+    fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
+    fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
+    fclose($fw);
+
+    rename("../label/" . $outputFileName, "../label/ShipRequest_" . $shipping_num . ".xml");
 } catch (Exception $ex) {
     print_r($ex);
 }
@@ -265,9 +245,9 @@ try {
 <html>  
 
     <body>
-        <button type="button" onclick="window.open('<?php print "../label/".$HTMLImage; ?>')">
+        <button type="button" onclick="window.open('<?php print "../label/" . $HTMLImage; ?>')">
             PDF</button>
-        <button type="button" onclick="window.open('<?php print "../label/".$rotate_label_image; ?>')">
+        <button type="button" onclick="window.open('<?php print "../label/" . $rotate_label_image; ?>')">
             print label</button>
 
 

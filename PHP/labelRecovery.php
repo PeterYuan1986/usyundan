@@ -15,8 +15,13 @@ if (!file_exists("../label/" . $rotate_label_image)) {
 
     $wsdl = "../SCHEMA-WSDLs/LabelRecoveryWS.wsdl";
     $operation = "ProcessLabelRecovery";
+    if ($developmodel == "test") {
     $endpointurl = 'https://wwwcie.ups.com/webservices/LBRecovery';
-    $outputFileName = "XOLTResult.xml";
+} else {
+    $endpointurl = 'https://onlinetools.ups.com/webservices/LBRecovery';
+}     
+    $endpointurl = 
+    $outputFileName = "../label/RecoverRequset_".$shipping_num.".xml";
 
     function LabelRecoveryRequest($shipping_num) {
         //create soap request

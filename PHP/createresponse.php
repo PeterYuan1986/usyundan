@@ -7,7 +7,7 @@ require 'header.php';
 //Configuration
 $wsdl = "../SCHEMA-WSDLs/RateWS.wsdl";
 $operation = "ProcessRate";
-$endpointurl = 'https://onlinetools.ups.com/webservices/Rate';   //  https://wwwcie.ups.com/webservices/Rate';
+$endpointurl = 'https://onlinetools.ups.com/webservices/Rate';
 $outputFileName = "lastresponse.xml";
 $outputFileName_reqest = "lastrequest.xml";
 
@@ -44,7 +44,7 @@ function processRate($QUOTE_REQUEST) {
     $addressTo['StateProvinceCode'] = $QUOTE_REQUEST['stateto'];
     $addressTo['PostalCode'] = $QUOTE_REQUEST['zipcodeto'];
     $addressTo['CountryCode'] = 'US';
-    $addressTo['ResidentialAddressIndicator'] = '';
+    $addressTo['ResidentialAddressIndicator'] = @$QUOTE_REQUEST['addressTo']['ResidentialAddressIndicator'];
     $shipto['Address'] = $addressTo;
     $shipment['ShipTo'] = $shipto;
 
@@ -143,7 +143,7 @@ try {
 
 <?php
 //从quote.php界面提取参数
-$QUOTE_REQUEST=$_SESSION['SHIP_REQUEST'];
+$QUOTE_REQUEST = $_SESSION['RATE']['SHIP_REQUEST'];
 
 try {
     $resp = $client->__soapCall($operation, array(processRate($QUOTE_REQUEST)));
@@ -158,10 +158,10 @@ try {
 //get status
 //echo "Response Status: " . $resp->Response->ResponseStatus . "\n";
 //save soap request and response to file    
-$fw = fopen("../label/".$outputFileName, 'w');
+$fw = fopen("../label/" . $outputFileName, 'w');
 fwrite($fw, $client->__getLastResponse() . "\n");
 fclose($fw);
-$fw = fopen("../label/".$outputFileName_reqest, 'w');
+$fw = fopen("../label/" . $outputFileName_reqest, 'w');
 fwrite($fw, $client->__getLastRequest() . "\n");
 fclose($fw);
 //$response=$client->__soapcall("getLastRequest",NULL);
@@ -175,9 +175,9 @@ $array = json_decode(json_encode($resp), true);
 foreach ($array['RatedShipment'] as $x) {
     $option = "CHECK" . $x['Service']['Code'];
     if (isset($_REQUEST[$option])) {
-        $_SESSION['SHIP_REQUEST'] = $QUOTE_REQUEST;
-        $_SESSION['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
-        header('Location: SoapShipClient.php?xl='.encode(session_id()));       
+        $_SESSION['LABEL']['SHIP_REQUEST'] = $QUOTE_REQUEST;
+        $_SESSION['LABEL']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
+        header('Location: printLabel.php?xl=' . encode(session_id()));
         exit;
     }
 }
@@ -197,53 +197,50 @@ foreach ($array['RatedShipment'] as $x) {
                 <tr> 
                     <td>NAME:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['namefrom'] ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['namefrom']) ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['nameto'] ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['nameto']) ?></td>
                 </tr>
                 <tr> 
                     <td>ADDRESS:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['ads1from'] . " " . $QUOTE_REQUEST['ads2from'] . " " . $QUOTE_REQUEST['ads3from']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['ads1from'] . " " . $QUOTE_REQUEST['ads2from'] . " " . $QUOTE_REQUEST['ads3from']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['ads1to'] . " " . $QUOTE_REQUEST['ads2to'] . " " . $QUOTE_REQUEST['ads3to']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['ads1to'] . " " . $QUOTE_REQUEST['ads2to'] . " " . $QUOTE_REQUEST['ads3to']); ?></td>
                 </tr>
                 <tr> 
                     <td>CITY:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['cityfrom']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['cityfrom']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['cityto']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['cityto']); ?></td>
                 </tr>
                 <tr> 
                     <td>STATE:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['statefrom']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['statefrom']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['stateto']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['stateto']); ?></td>
                 </tr>
                 <tr> 
                     <td>ZIPCODE:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['zipcodefrom']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['zipcodefrom']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['zipcodeto']; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['zipcodeto']); ?></td>
                 </tr>
                 <tr> 
                     <td>PACKAGE:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['weight'] . " LBS"; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['weight'] . " LBS"); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print $QUOTE_REQUEST['length'] . " inch x " . $QUOTE_REQUEST['width'] . " inch x " . $QUOTE_REQUEST['height'] . " inch"; ?></td>
+                    <td><?php print strtoupper($QUOTE_REQUEST['length'] . " inch x " . $QUOTE_REQUEST['width'] . " inch x " . $QUOTE_REQUEST['height'] . " inch"); ?></td>
                 </tr>
-
-
-
             </table>
-        </div>
+        </div>        
 
         <div>
-            <form action="" method="post" name="form">
+            <form action="#" method="post" name="form">
                 <table>
                     <tr>
                         <th>Shipping Service</th>
@@ -330,5 +327,6 @@ foreach ($array['RatedShipment'] as $x) {
                 </table>
             </form>
         </div>
+
     </body>   
 </html>

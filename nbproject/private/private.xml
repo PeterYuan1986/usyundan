@@ -5,11 +5,7 @@
         <group>
             <file>file:/C:/XAMPP/htdocs/usyundan/PHP/LabelRecovery.php</file>
             <file>file:/C:/XAMPP/htdocs/usyundan/PHP/SoapShipClient.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/PHP/createresponse.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/PHP/createrequest.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/SCHEMA-WSDLs/LabelRecoveryWS.wsdl</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/SCHEMA-WSDLs/Error1.1.xsd</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/PHP/header.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/PHP/XOLTResult.xml</file>
             <file>file:/C:/XAMPP/htdocs/usyundan/PHP/SoapRateClient_ForRating.php</file>
         </group>
     </open-files>
