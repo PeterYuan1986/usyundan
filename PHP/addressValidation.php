@@ -115,9 +115,9 @@ if (isset($_GET['keep'])) {
                     <td>
                         <div>
                             <a>You Original Delivery Address:<br><br></a>
-                            <a><?php print $QUOTE_REQUEST['nameto']; ?><br></a>      
-                            <a><?php print $QUOTE_REQUEST['ads1to'] . ", " . $QUOTE_REQUEST['ads2to'] . " " . $QUOTE_REQUEST['ads3to'] ?><br></a>
-                            <a><?php print $QUOTE_REQUEST['cityto'] . ", " . $QUOTE_REQUEST['stateto'] . " " . $QUOTE_REQUEST['zipcodeto']; ?></a>
+                            <a><?php print @$QUOTE_REQUEST['nameto']; ?><br></a>      
+                            <a><?php print @$QUOTE_REQUEST['ads1to'] . ", " . @$QUOTE_REQUEST['ads2to'] . " " . @$QUOTE_REQUEST['ads3to'] ?><br></a>
+                            <a><?php print @$QUOTE_REQUEST['cityto'] . ", " . @$QUOTE_REQUEST['stateto'] . " " . @$QUOTE_REQUEST['zipcodeto']; ?></a>
 
                         </div>
                     </td>
@@ -125,20 +125,36 @@ if (isset($_GET['keep'])) {
 
                         <div>
                             <a>UPS Recommed Delivery Address:<br><br></a>
-                            <a><?php print strtoupper($QUOTE_REQUEST['nameto']); ?><br></a>            
                             <a><?php
-                                if (is_array($array['Candidate']['AddressKeyFormat']['AddressLine'])) {
-                                    foreach ($array['Candidate']['AddressKeyFormat']['AddressLine'] as $x) {
-                                        print $x . "  ";
+                                $flag = @$array['Candidate']['AddressKeyFormat']['AddressLine'] == NULL;
+                                if (!$flag)
+                                    print strtoupper(@$QUOTE_REQUEST['nameto']);
+                                else
+                                    print "Your input address is invalid!!!"
+                                    ?><br></a>            
+                            <a>
+
+                                <?php
+                                if (!$flag) {
+                                    if (is_array(@$array['Candidate']['AddressKeyFormat']['AddressLine'])) {
+                                        foreach (@$array['Candidate']['AddressKeyFormat']['AddressLine'] as $x) {
+                                            print $x . "  ";
+                                        }
+                                    } else {
+                                        print @$array['Candidate']['AddressKeyFormat']['AddressLine'];
                                     }
-                                } else {
-                                    print $array['Candidate']['AddressKeyFormat']['AddressLine'];
                                 }
                                 ?><br>
 
 
                             </a>
-                            <a><?php print $array['Candidate']['AddressKeyFormat']['Region']; ?><br></a>
+                            <a><?php
+                                if (!$flag) {
+                                    print @$array['Candidate']['AddressKeyFormat']['Region'];
+                                } else {
+                                    echo '<form><input type="button" value="Return to previous page" onClick="javascript:history.go(-1)"></form>';
+                                }
+                                ?><br></a>
 
 
                         </div>
@@ -150,10 +166,12 @@ if (isset($_GET['keep'])) {
                 </tr>
 
                 <tr>
-
-                    <td><button  type="submit" name='keep'  onclick='return confirmation()'>KEEP</button>
+                    <?php
+                    if (!$flag)
+                        print " <td><button  type='submit' name='keep'  onclick='return confirmation()'>KEEP</button>
                     </td>
-                    <td><button  type="submit"    name='update'         />UPDATE</td>
+                    <td><button  type='submit'    name='update'         />UPDATE</td>";
+                    ?>
                 </tr>
 
             </table>
