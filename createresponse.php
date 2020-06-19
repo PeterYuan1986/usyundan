@@ -61,7 +61,7 @@ function processRate($QUOTE_REQUEST) {
     $service['Description'] = 'Service Code';
     $shipment['Service'] = $service;
 
-    $packaging1['Code'] = '02';
+    $packaging1['Code'] = '00';
     $packaging1['Description'] = 'Rate';
     $package1['PackagingType'] = $packaging1;
     $dunit1['Code'] = 'IN';

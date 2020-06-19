@@ -5,7 +5,8 @@ function encode($url) {
 }
 session_start();
 session_regenerate_id(FALSE);
-
+$now = time();
+$_SESSION['discard_after'] = $now + 600;
 
 
 if (isset($_REQUEST['quote'])) {
@@ -41,6 +42,8 @@ if (isset($_REQUEST['quote'])) {
     }
     $_SESSION['AV']['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
     $_SESSION['AV']['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
+    
+    //此处地址不在header 
     header('Location: addressValidation.php?xl='.encode(session_id()));       
     }
 
