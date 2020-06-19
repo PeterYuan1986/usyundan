@@ -5,7 +5,7 @@ require 'header.php';
 
 <?php
 //Configuration
-$wsdl = "../SCHEMA-WSDLs/RateWS.wsdl";
+$wsdl = "./SCHEMA-WSDLs/RateWS.wsdl";
 $operation = "ProcessRate";
 $endpointurl = 'https://onlinetools.ups.com/webservices/Rate';
 $outputFileName = "lastresponse.xml";
@@ -158,10 +158,10 @@ try {
 //get status
 //echo "Response Status: " . $resp->Response->ResponseStatus . "\n";
 //save soap request and response to file    
-$fw = fopen("../label/" . $outputFileName, 'w');
+$fw = fopen("./label/" . $outputFileName, 'w');
 fwrite($fw, $client->__getLastResponse() . "\n");
 fclose($fw);
-$fw = fopen("../label/" . $outputFileName_reqest, 'w');
+$fw = fopen("./label/" . $outputFileName_reqest, 'w');
 fwrite($fw, $client->__getLastRequest() . "\n");
 fclose($fw);
 //$response=$client->__soapcall("getLastRequest",NULL);
@@ -177,7 +177,7 @@ foreach ($array['RatedShipment'] as $x) {
     if (isset($_REQUEST[$option])) {
         $_SESSION['LABEL']['SHIP_REQUEST'] = $QUOTE_REQUEST;
         $_SESSION['LABEL']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
-        header('Location: printLabel.php?xl=' . encode(session_id()));
+        header('Location:' . $createresponse_to);
         exit;
     }
 }
@@ -308,6 +308,23 @@ foreach ($array['RatedShipment'] as $x) {
                                 }
                             case "71" : {
                                     print("<td> UPS Worldwide Express Freight Midday</td>");
+                                    break;
+                                }
+                            case "92" : {
+                                    print("<td> UPS SurePost Less than 1LB</td>");
+                                    break;
+                                }
+                            case "93" : {
+                                    print("<td> UPS SurePost 1LB or greater</td>");
+                                    break;
+                                }
+                            case "94" : {
+                                    print("<td> UPS SurePost BPM</td>");
+                                    break;
+                                }
+                            case "95" : {
+                                    print("<td> UPS SurePost Media Mail</td>");
+                                    break;
                                 }
                         }
                         print("<td>" . $x['BillingWeight']['Weight'] . " </td>");
@@ -321,9 +338,9 @@ foreach ($array['RatedShipment'] as $x) {
                         ?>
                         <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>' type="submit" value="choose"> SHIP </button> </td>
                         </tr>
-                        <?php
-                    }
-                    ?>      
+    <?php
+}
+?>      
                 </table>
             </form>
         </div>

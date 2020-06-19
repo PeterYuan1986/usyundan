@@ -314,7 +314,7 @@ try {
 
                 print('<br><br>From:' . $cityfrom . "," . $statefrom . "," . $zipcodefrom . "<br><br>");
                 print('To:' . $cityto . "," . $stateto . "," . $zipcodeto . "<br><br>");
-                print('Package weight:' . $weight.  " LBS". "<br><br>");
+                print('Package weight:' . $weight . " LBS" . "<br><br>");
                 print('Package dimision:' . $length . " inch x " . $width . " inch x " . $height . " inch<br><br><br>");
 
                 foreach ($array['RatedShipment'] as $x) {
@@ -373,6 +373,19 @@ try {
                             }
                         case "71" : {
                                 print("UPS Worldwide Express Freight Midday");
+                            }
+
+                        case "92" : {
+                                print("UPS SurePost Less than 1LB");
+                            }
+                        case "93" : {
+                                print("UPS SurePost 1LB or greater");
+                            }
+                        case "94" : {
+                                print("UPS SurePost BPM");
+                            }
+                        case "95" : {
+                                print("UPS SurePost Media Mail");
                             }
                     }
                     echo "<br><br>";

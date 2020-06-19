@@ -25,4 +25,9 @@ function encode($url){
 function decode($url){
     return ltrim(base64_decode($url),"yhy");
 }
+$createrequest_to ='addressValidation.php?xl='.encode(session_id());
+$addressValidation_to = 'createresponse.php?xl=' . encode(session_id());
+$createresponse_to= 'printLabel.php?xl=' . encode(session_id());
+
+
 ?>

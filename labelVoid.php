@@ -7,14 +7,14 @@ $shipping_num = $_GET['voidlabel'];
 <?php
 
 //Configuration
-$wsdl = "../SCHEMA-WSDLs/Void.wsdl";
+$wsdl = "./SCHEMA-WSDLs/Void.wsdl";
 $operation = "ProcessVoid";
 if ($developmodel == "test") {
     $endpointurl = 'https://wwwcie.ups.com/webservices/Void';
 } else {
     $endpointurl = 'https://onlinetools.ups.com/webservices/Void';
 }
-$outputFileName = "../label/VoidRequset_".$shipping_num.".xml";
+$outputFileName = "./label/VoidRequset_".$shipping_num.".xml";
 
 function processVoid($shipping_num) {
     //create soap request

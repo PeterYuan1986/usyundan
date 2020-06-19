@@ -11,9 +11,9 @@ $rotate_label_image = "rotate" . $shipping_num . ".gif";
 // http://php.net/soap.wsdl-cache-enabled
 // soap.wsdl_cache_enabled=0
 
-if (!file_exists("../label/" . $rotate_label_image)) {
+if (!file_exists("./label/" . $rotate_label_image)) {
 
-    $wsdl = "../SCHEMA-WSDLs/LabelRecoveryWS.wsdl";
+    $wsdl = "./SCHEMA-WSDLs/LabelRecoveryWS.wsdl";
     $operation = "ProcessLabelRecovery";
     if ($developmodel == "test") {
     $endpointurl = 'https://wwwcie.ups.com/webservices/LBRecovery';
@@ -21,7 +21,7 @@ if (!file_exists("../label/" . $rotate_label_image)) {
     $endpointurl = 'https://onlinetools.ups.com/webservices/LBRecovery';
 }     
     $endpointurl = 
-    $outputFileName = "../label/RecoverRequset_".$shipping_num.".xml";
+    $outputFileName = "./label/RecoverRequset_".$shipping_num.".xml";
 
     function LabelRecoveryRequest($shipping_num) {
         //create soap request
@@ -75,9 +75,9 @@ if (!file_exists("../label/" . $rotate_label_image)) {
 
         $source = imagecreatefromstring(base64_decode($array['LabelResults']['LabelImage']['GraphicImage']));
 
-        imagejpeg($source, "../label/" . $label_image, 100);
+        imagejpeg($source, "./label/" . $label_image, 100);
         $rotate = imagerotate($source, 270, 0); // if want to rotate the image
-        imagejpeg($rotate, "../label/" . $rotate_label_image, 100);
+        imagejpeg($rotate, "./label/" . $rotate_label_image, 100);
 
         //get status
         //echo "Response Status: " . $resp->Response->ResponseStatus->Description . "\n";
@@ -90,7 +90,7 @@ if (!file_exists("../label/" . $rotate_label_image)) {
         print_r($ex);
     }
 }
-$path = "../label/".$rotate_label_image;
+$path = "./label/".$rotate_label_image;
 
 ?>
 

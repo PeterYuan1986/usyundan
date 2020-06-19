@@ -7,10 +7,10 @@ require "header.php";
 $QUOTE_REQUEST = $_SESSION['AV']['SHIP_REQUEST'];
 
 //Configuration
-$wsdl = "../SCHEMA-WSDLs/XAV.wsdl";
+$wsdl = "./SCHEMA-WSDLs/XAV.wsdl";
 $operation = "ProcessXAV";
 $endpointurl = 'https://onlinetools.ups.com/webservices/XAV';
-$outputFileName = "../label/AV_Request.xml";
+$outputFileName = "./label/AV_Request.xml";
 
 function processXAV($QUOTE_REQUEST) {
     //create soap request
@@ -82,7 +82,7 @@ try {
 <?php
 if (isset($_GET['keep'])) {
     $_SESSION['RATE']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-    header('Location: createresponse.php?xl=' . encode(session_id()));
+    header('Location: '.$addressValidation_to);
 } elseif (isset($_GET['update'])) {
     $QUOTE_REQUEST['cityto'] = strtoupper($array['Candidate']['AddressKeyFormat']['PoliticalDivision2']);
     $QUOTE_REQUEST['stateto'] = strtoupper($array['Candidate']['AddressKeyFormat']['PoliticalDivision1']);
@@ -102,9 +102,12 @@ if (isset($_GET['keep'])) {
     }
 
     $_SESSION['RATE']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-    header('Location: createresponse.php?xl=' . encode(session_id()));
+    header('Location: '.$addressValidation_to);
 }
+
 ?>
+
+
 
 
 <html>
@@ -126,25 +129,25 @@ if (isset($_GET['keep'])) {
                         <div>
                             <a>UPS Recommed Delivery Address:<br><br></a>
                             <a><?php
-                                $flag = @$array['Candidate']['AddressKeyFormat']['AddressLine'] == NULL;
-                                if (!$flag)
-                                    print strtoupper(@$QUOTE_REQUEST['nameto']);
-                                else
-                                    print "Your input address is invalid!!!"
-                                    ?><br></a>            
+$flag = @$array['Candidate']['AddressKeyFormat']['AddressLine'] == NULL;
+if (!$flag)
+    print strtoupper(@$QUOTE_REQUEST['nameto']);
+else
+    print "Your input address is invalid!!!"
+    ?><br></a>            
                             <a>
 
-                                <?php
-                                if (!$flag) {
-                                    if (is_array(@$array['Candidate']['AddressKeyFormat']['AddressLine'])) {
-                                        foreach (@$array['Candidate']['AddressKeyFormat']['AddressLine'] as $x) {
-                                            print $x . "  ";
-                                        }
-                                    } else {
-                                        print @$array['Candidate']['AddressKeyFormat']['AddressLine'];
-                                    }
-                                }
-                                ?><br>
+<?php
+if (!$flag) {
+    if (is_array(@$array['Candidate']['AddressKeyFormat']['AddressLine'])) {
+        foreach (@$array['Candidate']['AddressKeyFormat']['AddressLine'] as $x) {
+            print $x . "  ";
+        }
+    } else {
+        print @$array['Candidate']['AddressKeyFormat']['AddressLine'];
+    }
+}
+?><br>
 
 
                             </a>
@@ -154,7 +157,7 @@ if (isset($_GET['keep'])) {
                                 } else {
                                     echo '<form><input type="button" value="Return to previous page" onClick="javascript:history.go(-1)"></form>';
                                 }
-                                ?><br></a>
+?><br></a>
 
 
                         </div>
@@ -166,24 +169,23 @@ if (isset($_GET['keep'])) {
                 </tr>
 
                 <tr>
-                    <?php
-                    if (!$flag)
-                        print " <td><button  type='submit' name='keep'  onclick='return confirmation()'>KEEP</button>
+<?php
+if (!$flag)
+    print " <td><button  type='submit' name='keep'  onclick='return confirmation()'>KEEP</button>
                     </td>
                     <td><button  type='submit'    name='update'         />UPDATE</td>";
-                    ?>
+?>
                 </tr>
 
             </table>
         </form>
+
+        <script>
+            function confirmation(url) {
+
+                return confirm('The address non-validation may case error in the future!!');
+            }
+        </script>
     </body>
-
-
-    <script>
-        function confirmation(url) {
-
-            return confirm('The address non-validation may case error in the future!!');
-        }
-    </script>
 
 </html>

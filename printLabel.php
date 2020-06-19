@@ -4,7 +4,7 @@ require 'header.php';
 
 <?php
 //Configuration
-$wsdl = "../SCHEMA-WSDLs/Ship.wsdl";
+$wsdl = "./SCHEMA-WSDLs/Ship.wsdl";
 $operation = "ProcessShipment";
 if ($developmodel == "test") {
     $endpointurl = 'https://wwwcie.ups.com/webservices/Ship';
@@ -220,23 +220,23 @@ try {
     $rotate_label_image = "rotate" . $shipping_num . ".gif";
 
     $source = imagecreatefromstring(base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['GraphicImage']));
-    imagejpeg($source, "../label/" . $label_image, 100);
+    imagejpeg($source, "./label/" . $label_image, 100);
     $rotate = imagerotate($source, 270, 0); // if want to rotate the image
-    imagejpeg($rotate, "../label/" . $rotate_label_image, 100);
+    imagejpeg($rotate, "./label/" . $rotate_label_image, 100);
 
 
 
     $HTMLImage = "label" . $shipping_num . ".html";
-    $file = fopen("../label/" . $HTMLImage, "w");
+    $file = fopen("./label/" . $HTMLImage, "w");
     fwrite($file, base64_decode($array['ShipmentResults']['PackageResults']['ShippingLabel']['HTMLImage']));
     fclose($file);
 
-    $fw = fopen("../label/" . $outputFileName, 'w');
+    $fw = fopen("./label/" . $outputFileName, 'w');
     fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
     fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
     fclose($fw);
 
-    rename("../label/" . $outputFileName, "../label/ShipRequest_" . $shipping_num . ".xml");
+    rename("./label/" . $outputFileName, "./label/ShipRequest_" . $shipping_num . ".xml");
 } catch (Exception $ex) {
     print_r($ex);
 }
@@ -245,13 +245,10 @@ try {
 <html>  
 
     <body>
-        <button type="button" onclick="window.open('<?php print "../label/" . $HTMLImage; ?>')">
+        <button type="button" onclick="window.open('<?php print "./label/" . $HTMLImage; ?>')">
             PDF</button>
-        <button type="button" onclick="window.open('<?php print "../label/" . $rotate_label_image; ?>')">
+        <button type="button" onclick="window.open('<?php print "./label/" . $rotate_label_image; ?>')">
             print label</button>
-
-
-
     </body>
 
 
