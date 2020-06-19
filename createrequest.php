@@ -3,9 +3,10 @@
 function encode($url) {
     return base64_encode("yhy" . $url);
 }
-
-session_id(time());
 session_start();
+session_regenerate_id(FALSE);
+
+
 
 if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];
