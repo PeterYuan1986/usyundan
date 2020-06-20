@@ -3,11 +3,11 @@
 function encode($url) {
     return base64_encode("yhy" . $url);
 }
+
 session_start();
 session_regenerate_id(FALSE);
 $now = time();
-$_SESSION['discard_after'] = $now + 600;
-
+$_SESSION['discard_after'] = $now + 10000;
 
 if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];
@@ -42,15 +42,16 @@ if (isset($_REQUEST['quote'])) {
     }
     $_SESSION['AV']['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
     $_SESSION['AV']['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
-    
-    //此处地址不在header 
-    header('Location: addressValidation.php?xl='.encode(session_id()));       
-    }
 
+    //此处地址不在header 
+    header('Location: addressValidation.php?xl=' . encode(session_id()));
+}
 ?>
+<!-- 分割线1 -->
 
 <html class="no-js" lang="en">
     <body>
+        <!-- 分割线2 -->
         <form name="form" method="post"  action='' id="loginForm">
             <div>Ship From:
                 <div>
@@ -160,5 +161,6 @@ if (isset($_REQUEST['quote'])) {
                 <a href="#"><input type="submit" name="quote" value="Quote">  </a>
             </div>
         </form>
+        <!-- 分割线3 -->
     </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 require "header.php";
+
 ?>
 
 <?php
@@ -82,7 +83,7 @@ try {
 <?php
 if (isset($_GET['keep'])) {
     $_SESSION['RATE']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-    header('Location:' . $addressValidation_to . encode(session_id()));
+    header('Location: '.$addressValidation_to);
 } elseif (isset($_GET['update'])) {
     $QUOTE_REQUEST['cityto'] = strtoupper($array['Candidate']['AddressKeyFormat']['PoliticalDivision2']);
     $QUOTE_REQUEST['stateto'] = strtoupper($array['Candidate']['AddressKeyFormat']['PoliticalDivision1']);
@@ -102,16 +103,16 @@ if (isset($_GET['keep'])) {
     }
 
     $_SESSION['RATE']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-    header('Location:' . $addressValidation_to . encode(session_id()));
+    header('Location: '.$addressValidation_to);
 }
+
 ?>
-<!-- 分割线1 -->
+
 
 
 
 <html>
     <body>
-        <!-- 分割线2 -->
         <form>
             <table>
                 <tr>
@@ -186,7 +187,6 @@ if (!$flag)
                 return confirm('The address non-validation may case error in the future!!');
             }
         </script>
-        <!-- 分割线3 -->
     </body>
 
 </html>

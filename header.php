@@ -5,14 +5,14 @@ if (isset($_GET['xl'])) {
 }
 session_start();
 $now = time();
-if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
-    // this session has worn out its welcome; kill it and start a brand new one
-    session_unset();
-    session_destroy();
-    header('Location:timeout.php');
+if ((isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after'] ) || !isset($_SESSION['discard_after'])) {
+    // this session has worn out its welcome; kill it and start a brand new one 
+    header('Location:timeout.php?xl='. encode(session_id()));
 }
 // either new or old, it should live at most for another hour
-$_SESSION['discard_after'] = $now + 600;
+else {
+    $_SESSION['discard_after'] = $now + 900;  //过期15分钟session销毁跳到timeout
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,7 +32,7 @@ function decode($url) {
     return ltrim(base64_decode($url), "yhy");
 }
 
-$createrequest_to = 'addressValidation.php?xl=' . encode(session_id());
-$addressValidation_to = 'createresponse.php?xl=' . encode(session_id());
-$createresponse_to = 'printLabel.php?xl=' . encode(session_id());
+$createrequest_to = 'addressValidation.php?xl=';
+$addressValidation_to = 'createresponse.php?xl=';
+$createresponse_to = 'printLabel.php?xl=';
 ?>

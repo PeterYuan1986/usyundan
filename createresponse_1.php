@@ -177,18 +177,14 @@ foreach ($array['RatedShipment'] as $x) {
     if (isset($_REQUEST[$option])) {
         $_SESSION['LABEL']['SHIP_REQUEST'] = $QUOTE_REQUEST;
         $_SESSION['LABEL']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
-        header('Location:' . $createresponse_to . encode(session_id()));
+        header('Location:' . $createresponse_to);
         exit;
     }
 }
 ?>
-
-
-<!-- 分割线1 -->
 <html class="no-js" lang="en">
-
+    <head></head>
     <body> 
-        <!-- 分割线2 -->
         <div>
             <table>
                 <tr> 
@@ -342,12 +338,12 @@ foreach ($array['RatedShipment'] as $x) {
                         ?>
                         <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>' type="submit" value="choose"> SHIP </button> </td>
                         </tr>
-                        <?php
-                    }
-                    ?>      
+    <?php
+}
+?>      
                 </table>
             </form>
         </div>
-        <!-- 分割线3 -->
+
     </body>   
 </html>

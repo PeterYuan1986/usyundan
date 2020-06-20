@@ -241,16 +241,14 @@ try {
     print_r($ex);
 }
 ?>
-<!-- 分割线1 -->
+
 <html>  
 
     <body>
-        <!-- 分割线2 -->
         <button type="button" onclick="window.open('<?php print "./label/" . $HTMLImage; ?>')">
             PDF</button>
         <button type="button" onclick="window.open('<?php print "./label/" . $rotate_label_image; ?>')">
             print label</button>
-        <!-- 分割线3 -->
     </body>
 
 
