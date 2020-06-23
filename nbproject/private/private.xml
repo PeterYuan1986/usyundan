@@ -3,11 +3,19 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/XAMPP/htdocs/usyundan/addressValidation.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/header.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/createresponse.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/querylist.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/pay.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/api.php</file>
             <file>file:/C:/XAMPP/htdocs/usyundan/createrequest.php</file>
-            <file>file:/C:/XAMPP/htdocs/usyundan/printLabel.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/paymentheader.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/template.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/SoapRateClient_ForRating.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/query.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/addressValidation.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/printlabel.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/header.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/notify.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/prepayment.php</file>
         </group>
     </open-files>
 </project-private>

@@ -1,5 +1,7 @@
 <?php
 require "header.php";
+startSID();
+check_session_expiration();
 ?>
 
 <?php

@@ -1,13 +1,7 @@
 <?php
-
-function encode($url) {
-    return base64_encode("yhy" . $url);
-}
-
+require'header.php';
 session_start();
 session_regenerate_id(FALSE);
-$now = time();
-$_SESSION['discard_after'] = $now + 10000;
 
 if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];
@@ -43,8 +37,8 @@ if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['zipcodefrom'] = @$_POST["zipcodefrom"];
     $_SESSION['AV']['SHIP_REQUEST']['zipcodeto'] = @$_POST["zipcodeto"];
 
-    //此处地址不在header 
-    header('Location: addressValidation.php?xl=' . encode(session_id()));
+ 
+    header('Location:' . $createrequest_to . encode(session_id()));
 }
 ?>
 <!-- 分割线1 -->

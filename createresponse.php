@@ -1,5 +1,7 @@
 <?php
 require 'header.php';
+startSID();
+check_session_expiration();
 ?>
 
 
@@ -175,14 +177,22 @@ $array = json_decode(json_encode($resp), true);
 foreach ($array['RatedShipment'] as $x) {
     $option = "CHECK" . $x['Service']['Code'];
     if (isset($_REQUEST[$option])) {
-        $_SESSION['LABEL']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-        $_SESSION['LABEL']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
+        $_SESSION['CONFIRM']['SHIP_REQUEST'] = $QUOTE_REQUEST;
+        $_SESSION['CONFIRM']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
+        $_SESSION['CONFIRM']['SHIP_REQUEST']['COST'] = adjust_price($x['TotalCharges']['MonetaryValue'],$x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']);
+        $_SESSION['CONFIRM']['SHIP_REQUEST']['ORIGINALCOST'] = $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue'];
         header('Location:' . $createresponse_to . encode(session_id()));
         exit;
     }
 }
 ?>
+<?php 
 
+function adjust_price($orignal, $cost){
+    return round(min($cost+2,max($cost+0.5, 1.05*$cost),$orignal),2);      
+}
+
+?>
 
 <!-- 分割线1 -->
 <html class="no-js" lang="en">
@@ -244,7 +254,7 @@ foreach ($array['RatedShipment'] as $x) {
         </div>        
 
         <div>
-            <form action="#" method="post" name="form">
+            <form action="#" method="get" name="form">
                 <table>
                     <tr>
                         <th>Shipping Service</th>
@@ -259,23 +269,23 @@ foreach ($array['RatedShipment'] as $x) {
                         print "<tr>";
                         switch ($x['Service']['Code']) {
                             case "01": {
-                                    print("<td> Next Day Air </td>");
+                                    print("<td> UPS Next Day Air </td>");
                                     break;
                                 }
                             case "02" : {
-                                    print(" <td> 2nd Day Air </td>");
+                                    print(" <td> UPS 2nd Day Air </td>");
                                     break;
                                 }
                             case "03" : {
-                                    print(" <td> Ground </td>");
+                                    print(" <td> UPS Ground </td>");
                                     break;
                                 }
                             case "12" : {
-                                    print(" <td> 3 Day Select </td>");
+                                    print(" <td> UPS 3 Day Select </td>");
                                     break;
                                 }
                             case "13" : {
-                                    print(" <td> Next Day Air Saver </td>");
+                                    print(" <td> UPS Next Day Air Saver </td>");
                                     break;
                                 }
                             case "14" : {
@@ -337,10 +347,10 @@ foreach ($array['RatedShipment'] as $x) {
                             print("<td>" . @$x['GuaranteedDelivery']['BusinessDaysInTransit'] . "</td>");
                         } else
                             print("<td></td>>");
-                        print("<td>" . $x['TotalCharges']['MonetaryValue'] . "</td>");
-                        print("<td>" . $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue'] . "</td>");
+                        print("<td>" . $x['TotalCharges']['MonetaryValue']. "</td>");
+                        print("<td>" . adjust_price($x['TotalCharges']['MonetaryValue'],$x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) . "</td>");
                         ?>
-                        <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>' type="submit" value="choose"> SHIP </button> </td>
+                    <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>' onclick='alert("将为您跳转支付页面！");' type="submit" > 支付 </button> </td>
                         </tr>
                         <?php
                     }
@@ -348,6 +358,9 @@ foreach ($array['RatedShipment'] as $x) {
                 </table>
             </form>
         </div>
+        
+        
         <!-- 分割线3 -->
+ 
     </body>   
 </html>

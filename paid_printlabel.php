@@ -1,5 +1,17 @@
 <?php
 require 'header.php';
+
+if (isset($_GET['id'])) {
+    $OID = ($_GET['id']);
+}
+
+$row= getorder_allinfo($OID);
+$SHIP_REQUEST = $row[$column_info];
+$price = $row[$column_price];
+$status = $row[$column_status];
+$time = $row[$column_time];
+$tid = $row[$column_tid];
+$tracking_number = $row[$column_tracking_number];
 ?>
 
 <?php
@@ -12,7 +24,6 @@ if ($developmodel == "test") {
     $endpointurl = 'https://onlinetools.ups.com/webservices/Ship';
 }
 $outputFileName = "ShipRequest.xml";
-$SHIP_REQUEST = $_SESSION['LABEL']['SHIP_REQUEST'];
 
 function processShipment($SHIP_REQUEST) {
     //create soap request
@@ -21,7 +32,7 @@ function processShipment($SHIP_REQUEST) {
     $shipment['Description'] = '';
     $shipper['Name'] = $SHIP_REQUEST['namefrom'];
     $shipper['AttentionName'] = $SHIP_REQUEST['namefrom'];
-    $shipper['TaxIdentificationNumber'] = '123456';
+    $shipper['TaxIdentificationNumber'] = '';
     $shipper['ShipperNumber'] = '86F304 ';
     $address['AddressLine'] = $SHIP_REQUEST['ads1from'] . ", " . $SHIP_REQUEST['ads2from'] . ", " . $SHIP_REQUEST['ads3from'];
     $address['City'] = $SHIP_REQUEST['cityfrom'];
@@ -48,8 +59,6 @@ function processShipment($SHIP_REQUEST) {
     $shipto['Phone'] = $phone2;
     $shipment['ShipTo'] = $shipto;
 
-
-
     $shipfrom['Name'] = $SHIP_REQUEST['namefrom'];
     $shipfrom['AttentionName'] = $SHIP_REQUEST['namefrom'];
     $addressFrom['AddressLine'] = $SHIP_REQUEST['ads1from'] . $SHIP_REQUEST['ads2from'] . $SHIP_REQUEST['ads3from'];
@@ -61,8 +70,6 @@ function processShipment($SHIP_REQUEST) {
     $shipfrom['Address'] = $addressFrom;
     $shipfrom['Phone'] = $phone3;
     $shipment['ShipFrom'] = $shipfrom;
-
-
 
     $shipmentcharge['Type'] = '01';
     $creditcard['Type'] = '06';
@@ -216,6 +223,7 @@ try {
      */
     $array = json_decode(json_encode($resp), true);
     $shipping_num = $array['ShipmentResults']['ShipmentIdentificationNumber'];
+    updateorder_label($OID, $shipping_num);                    //将单号更新到数据库中
     $label_image = "label" . $shipping_num . ".gif";
     $rotate_label_image = "rotate" . $shipping_num . ".gif";
 
@@ -235,8 +243,14 @@ try {
     fwrite($fw, "Request: \n" . $client->__getLastRequest() . "\n");
     fwrite($fw, "Response: \n" . $client->__getLastResponse() . "\n");
     fclose($fw);
-
     rename("./label/" . $outputFileName, "./label/ShipRequest_" . $shipping_num . ".xml");
+    updateorder_status($OID, 'PT');                    //更新已经打印状态
+    /* PD: 新建订单ID，状态PENDING
+     * PT： 已经打印
+     * YF： 已经支付
+     * WF:  未支付
+     * ER： 支付调用异常的情况
+     */
 } catch (Exception $ex) {
     print_r($ex);
 }
@@ -246,6 +260,11 @@ try {
 
     <body>
         <!-- 分割线2 -->
+        <h1>支付成功！</h1>
+        <h4>支付时间：<?php print $time;?></h4>
+        <h4>订单号：<?php print $OID;    ?></h4>
+        <h4>交易流水号：<?php print $tid;?></h4>        
+        <h4>快递单号：<?php print $tracking_number;?></h4>
         <button type="button" onclick="window.open('<?php print "./label/" . $HTMLImage; ?>')">
             PDF</button>
         <button type="button" onclick="window.open('<?php print "./label/" . $rotate_label_image; ?>')">
