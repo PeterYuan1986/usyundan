@@ -3,7 +3,7 @@ require 'header.php';
 startSID();
 check_session_expiration();
 $QUOTE_REQUEST = $_SESSION['CHECK']['SHIP_REQUEST'];
-$price = $QUOTE_REQUEST['COST'] * get_m2rate();
+$price = round($QUOTE_REQUEST['COST'] * get_m2rate(),2);
 $cost = $QUOTE_REQUEST['ORIGINALCOST'];
 $info = json_encode($QUOTE_REQUEST);
 
