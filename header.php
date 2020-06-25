@@ -1,4 +1,10 @@
 <?php
+//UPS 相关信息
+$access = "1D7F00B3B06A9135";   //UPC ACCESS
+$userid = "elephxp";            //UPS USER ID
+$passwd = "ABC123efg@";         //UPS USER PWD
+$developmodel = "test";         //"prod" or "test" model
+
 
 //服务器相关信息
 $servername = "localhost";
@@ -26,20 +32,12 @@ if (mysqli_connect_error($conn)) {
 }
 
 
-//UPS 相关信息
-$access = "1D7F00B3B06A9135";   //UPC ACCESS
-$userid = "elephxp";            //UPS USER ID
-$passwd = "ABC123efg@";         //UPS USER PWD
-$developmodel = "test";         //"prod" or "test" model
+
 //页面跳转索引
 $createrequest_to = 'addressValidation.php?xl=';
 $addressValidation_to = 'createresponse.php?xl=';
-$createresponse_to = './pay/pay.php?xl=';
-
-//支付平台账户密码
-//$appid = '201906129696'; //测试账户，
-//$appsecret = 'b24f797cfff12c0aadff9b6ce4169bd2'; //测试账户，
-
+$createresponse_to = 'review.php?xl=';
+$review_to = './pay/pay.php?xl=';
 
 //查询订单信息
 function lookup_info($orderid) {
@@ -80,6 +78,13 @@ function genorder($price, $cost, $info) {
     return $unique;
 }
 
+//删除订单
+function deleteorder($orderid) {
+    $sql = "DELETE FROM " . $tablename . " WHERE " . $column_orderid . "=" . $orderid;            
+    $result = mysqli_query($conn, $sql);
+    return $result;
+}
+
 //更新订单状态
 function updateorder_status($orderid, $status) {
     global $tablename, $column_orderid, $conn, $column_status;
@@ -94,7 +99,7 @@ function getorder_allinfo($orderid) {
     $sql = "SELECT " . $column_tid . "," . $column_price . "," . $column_cost . "," . $column_status . "," . $column_time . "," . $column_tracking_number . "," . $column_info . " FROM " . $tablename . " WHERE " . $column_orderid . "=" . $orderid;
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
-    return $row;  
+    return $row;
 }
 
 //更新订单收款方流水号
@@ -107,7 +112,7 @@ function updateorder_transaction_id($orderid, $tid) {
 
 //更新订单label tracking number
 function updateorder_label($orderid, $label) {
-    global $tablename,$column_tracking_number,$column_orderid,$conn;
+    global $tablename, $column_tracking_number, $column_orderid, $conn;
     $sql = "UPDATE " . $tablename . " SET " . $column_tracking_number . "='" . $label . "' WHERE " . $column_orderid . "=" . $orderid;
     $result = mysqli_query($conn, $sql);
     return $result;
@@ -144,4 +149,5 @@ function encode($url) {
 function decode($url) {
     return ltrim(base64_decode($url), "yhy");
 }
+
 ?>

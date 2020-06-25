@@ -177,21 +177,21 @@ $array = json_decode(json_encode($resp), true);
 foreach ($array['RatedShipment'] as $x) {
     $option = "CHECK" . $x['Service']['Code'];
     if (isset($_REQUEST[$option])) {
-        $_SESSION['CONFIRM']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-        $_SESSION['CONFIRM']['SHIP_REQUEST']['SERVICE'] = $x['Service']['Code'];
-        $_SESSION['CONFIRM']['SHIP_REQUEST']['COST'] = adjust_price($x['TotalCharges']['MonetaryValue'],$x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']);
-        $_SESSION['CONFIRM']['SHIP_REQUEST']['ORIGINALCOST'] = $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue'];
+        $_SESSION['CHECK']['SHIP_REQUEST'] = $QUOTE_REQUEST;
+        $_SESSION['CHECK']['SHIP_REQUEST']['GuaranteedDelivery']['BusinessDaysInTransit']=$x['GuaranteedDelivery']['BusinessDaysInTransit'];
+        $_SESSION['CHECK']['SHIP_REQUEST']['SERVICE']['Code'] = $x['Service']['Code'];
+        $_SESSION['CHECK']['SHIP_REQUEST']['COST'] = adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']);
+        $_SESSION['CHECK']['SHIP_REQUEST']['ORIGINALCOST'] = $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue'];
         header('Location:' . $createresponse_to . encode(session_id()));
         exit;
     }
 }
 ?>
-<?php 
+<?php
 
-function adjust_price($orignal, $cost){
-    return round(min($cost+2,max($cost+0.5, 1.05*$cost),$orignal),2);      
+function adjust_price($orignal, $cost) {
+    return round(min($cost + 2, max($cost + 0.5, 1.05 * $cost), $orignal), 2);
 }
-
 ?>
 
 <!-- 分割线1 -->
@@ -204,33 +204,33 @@ function adjust_price($orignal, $cost){
                 <tr> 
                     <td></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td>SENDER</td>
+                    <td>发件人</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td>RECEIVER</td>
+                    <td>收件人</td>
                 </tr>
                 <tr> 
-                    <td>NAME:</td>
+                    <td>姓名:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['namefrom']) ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['nameto']) ?></td>
                 </tr>
                 <tr> 
-                    <td>ADDRESS:</td>
+                    <td>地址:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['ads1from'] . " " . $QUOTE_REQUEST['ads2from'] . " " . $QUOTE_REQUEST['ads3from']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['ads1to'] . " " . $QUOTE_REQUEST['ads2to'] . " " . $QUOTE_REQUEST['ads3to']); ?></td>
                 </tr>
                 <tr> 
-                    <td>CITY:</td>
+                    <td>城市:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['cityfrom']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['cityto']); ?></td>
                 </tr>
                 <tr> 
-                    <td>STATE:</td>
+                    <td>州:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
                     <td><?php print strtoupper($QUOTE_REQUEST['statefrom']); ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
@@ -244,26 +244,30 @@ function adjust_price($orignal, $cost){
                     <td><?php print strtoupper($QUOTE_REQUEST['zipcodeto']); ?></td>
                 </tr>
                 <tr> 
-                    <td>PACKAGE:</td>
+                    <td>包裹信息:</td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print strtoupper($QUOTE_REQUEST['weight'] . " LBS"); ?></td>
+                    <td><?php print $QUOTE_REQUEST['weight'] . " 磅"; ?></td>
                     <td>&nbsp;&nbsp;&nbsp;</td>
-                    <td><?php print strtoupper($QUOTE_REQUEST['length'] . " inch x " . $QUOTE_REQUEST['width'] . " inch x " . $QUOTE_REQUEST['height'] . " inch"); ?></td>
+                    <td><?php print $QUOTE_REQUEST['length'] . " 英寸 x " . $QUOTE_REQUEST['width'] . " 英寸 x " . $QUOTE_REQUEST['height'] . " 英寸"; ?></td>
                 </tr>
             </table>
         </div>        
-
+        <div>
+            <h1></h1>      
+            
+        </div>
         <div>
             <form action="#" method="get" name="form">
                 <table>
                     <tr>
-                        <th>Shipping Service</th>
-                        <th>BillingWeight </th>
-                        <th>GuaranteedDelivery </th>
-                        <th>Total Charge</th>
-                        <th>Negotiate Charge </th>                                      
-                        <th>Option</th>
+                        <th>可选服务种类</th>
+                        <th>计费重量(磅) </th>
+                        <th>预计送达时间(工作日)</th>
+                        <th>UPS官方价格</th>
+                        <th>实收（美元）</th>                                      
+                        <th></th>
                     </tr>
+                    
                     <?php
                     foreach ($array['RatedShipment'] as $x) {
                         print "<tr>";
@@ -344,23 +348,25 @@ function adjust_price($orignal, $cost){
                         print("<td>" . $x['BillingWeight']['Weight'] . " </td>");
 
                         if (@$x['GuaranteedDelivery']['BusinessDaysInTransit'] > 0) {
-                            print("<td>" . @$x['GuaranteedDelivery']['BusinessDaysInTransit'] . "</td>");
+                            print("<td>"); 
+                            @$x['GuaranteedDelivery']['BusinessDaysInTransit']===NULL?print 'N/A':print $x['GuaranteedDelivery']['BusinessDaysInTransit']; 
+                            print ("</td>");
                         } else
-                            print("<td></td>>");
-                        print("<td>" . $x['TotalCharges']['MonetaryValue']. "</td>");
-                        print("<td>" . adjust_price($x['TotalCharges']['MonetaryValue'],$x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) . "</td>");
+                            print("<td></td>");
+                        print("<td>$" . $x['TotalCharges']['MonetaryValue'] . "</td>");
+                        print("<td>$" . adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) . "</td>");
                         ?>
-                    <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>' onclick='alert("将为您跳转支付页面！");' type="submit" > 支付 </button> </td>
+                        <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>'  type="submit" > 确认 </button> </td>
                         </tr>
                         <?php
                     }
                     ?>      
                 </table>
             </form>
+            <a href="createrequest.php">返回上一级</a>
         </div>
         
-        
         <!-- 分割线3 -->
- 
+
     </body>   
 </html>

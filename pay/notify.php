@@ -10,7 +10,7 @@
  */
 require_once 'api.php';
 require "../header.php";
-
+startSID();
 /**
  * 回调数据
  * @var array(
@@ -71,7 +71,7 @@ if ($data['status'] == 'OD') {
     //处理未支付的情况
     updateorder_transaction_id($data['trade_order_id'], $data['trade_order_id']);
     updateorder_status($data['trade_order_id'], "WF");
-    
+    header('Location:' . $addressValidation_to . encode($SID));
     /* PD: 新建订单ID，状态PENDING
      * PT： 已经打印
      * YF： 已经支付

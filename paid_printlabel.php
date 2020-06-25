@@ -6,7 +6,8 @@ if (isset($_GET['id'])) {
 }
 
 $row= getorder_allinfo($OID);
-$SHIP_REQUEST = $row[$column_info];
+$quest= json_decode($row[$column_info],TRUE);//从数据库里的info提取信息
+$SHIP_REQUEST = $quest;
 $price = $row[$column_price];
 $status = $row[$column_status];
 $time = $row[$column_time];

@@ -2,6 +2,7 @@
 require'header.php';
 session_start();
 session_regenerate_id(FALSE);
+$_SESSION['discard_after'] =time() + 10000;
 
 if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['nameto'] = @$_POST["nameto"];

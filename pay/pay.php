@@ -1,9 +1,10 @@
 <?php
 require "../header.php";
+startSID();
+check_session_expiration();
 $QUOTE_REQUEST = $_SESSION['CONFIRM']['SHIP_REQUEST'];
-$price = $QUOTE_REQUEST['COST'] * get_m2rate();
-$cost = $QUOTE_REQUEST['ORIGINALCOST'];
-$info = json_encode($QUOTE_REQUEST);
+$trade_order_id=$QUOTE_REQUEST['USYUNDAN']['SID'];
+$price=$QUOTE_REQUEST['USYUNDAN']['PRICE'];
 
 /**
  * 调用支付
@@ -13,102 +14,15 @@ $info = json_encode($QUOTE_REQUEST);
  * @copyright 重庆迅虎网络有限公司
  */
 require_once 'api.php';
-$trade_order_id = genorder($price,$cost, $info); //新建订单ID
-$appid = '2147483647'; //测试账户，
-$appsecret = '160130736b1ac0d54ed7abe51e44840b'; //测试账户，
+
+
+
+//支付平台账户密码
+$appid = '201906129696'; 
+$appsecret = 'b24f797cfff12c0aadff9b6ce4169bd2'; 
 $my_plugin_id = 'my-plugins-id';
 
 
-switch ($QUOTE_REQUEST['SERVICE']) {
-    case "01": {
-            $ser = "UPS Next Day Air";
-            break;
-        }
-    case "02" : {
-            $ser = "UPS 2nd Day Air";
-            break;
-        }
-    case "03" : {
-            $ser = "UPS Ground";
-
-            break;
-        }
-    case "12" : {
-            $ser = "UPS 3 Day Select";
-
-            break;
-        }
-    case "13" : {
-            $ser = "UPS Next Day Air Saver";
-
-            break;
-        }
-    case "14" : {
-            $ser = "UPS Next Day Air Early";
-
-            break;
-        }
-    case "59" : {
-            $ser = "UPS 2nd Day Air A.M.";
-
-            break;
-        }
-    case "07" : {
-            $ser = "UPS Worldwide Express";
-
-            break;
-        }
-    case "08" : {
-            $ser = "UPS 2nd Day Air";
-
-            break;
-        }
-    case "11": {
-            $ser = "UPS Standard";
-
-            break;
-        }
-    case "54" : {
-            $ser = "Worldwide Express Plus";
-
-            break;
-        }
-    case "65" : {
-            $ser = "UPS 2nd Day Air";
-
-            break;
-        }
-    case "96" : {
-            $ser = "UPS Worldwide Express Freight";
-
-            break;
-        }
-    case "71" : {
-            $ser = "UPS Worldwide Express Freight Midday";
-
-            break;
-        }
-    case "92" : {
-            $ser = "UPS SurePost Less than 1LB";
-
-            break;
-        }
-    case "93" : {
-            $ser = "UPS SurePost 1LB or greater";
-
-            break;
-        }
-    case "94" : {
-            $ser = "UPS SurePost BPM";
-
-            break;
-        }
-    case "95" : {
-            $ser = "UPS SurePost Media Mail";
-
-            break;
-        }
-}
 
 $data = array(
     'version' => '1.1', //固定值，api 版本，目前暂时是1.1
@@ -117,11 +31,11 @@ $data = array(
     'appid' => $appid, //必须的，APPID
     'trade_order_id' => $trade_order_id, //必须的，网站订单ID，唯一的，匹配[a-zA-Z\d\-_]+
     'payment' => 'wechat', //必须的，支付接口标识：wechat(微信接口)|alipay(支付宝接口)
-    'total_fee' => '0.01', //$price, //人民币，单位精确到分(测试账户只支持0.1元内付款)
-    'title' => $ser, //必须的，订单标题，长度32或以内
+    'total_fee' => ($developmodel == "test")?'0.01':$price, //人民币，单位精确到分(测试账户只支持0.1元内付款)
+    'title' => $QUOTE_REQUEST['SERVICE']['Descripsion'], //必须的，订单标题，长度32或以内
     'time' => time(), //必须的，当前时间戳，根据此字段判断订单请求是否已超时，防止第三方攻击服务器
-    'notify_url' => 'http://www.unihorn.tech/ups/pay/notify.php', //必须的，支付成功异步回调接口
-    'return_url' => 'http://www.unihorn.tech/ups/paid_printlabel.php', //必须的，支付成功后的跳转地址
+    'notify_url' => 'http://www.unihorn.tech/ups/pay/notify.php?id='.$trade_order_id, //必须的，支付成功异步回调接口
+    'return_url' => 'http://www.unihorn.tech/ups/paid_printlabel.php?id='.$trade_order_id, //必须的，支付成功后的跳转地址
     'callback_url' => 'http://www.unihorn.tech/ups/createresponse.php', //必须的，支付发起地址（未支付或支付失败，系统会会跳到这个地址让用户修改支付信息）
     'modal' => null, //可空，支付模式 ，可选值( full:返回完整的支付网页; qrcode:返回二维码; 空值:返回支付跳转链接)
     'nonce_str' => str_shuffle(time())//必须的，随机字符串，作用：1.避免服务器缓存，2.防止安全密钥被猜测出来
