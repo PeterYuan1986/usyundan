@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 
 if (isset($_GET['id'])) {
     $OID = ($_GET['id']);

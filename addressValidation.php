@@ -1,5 +1,5 @@
 <?php
-require "header.php";
+require_once "header.php";
 startSID();
 check_session_expiration();
 ?>

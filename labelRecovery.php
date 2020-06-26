@@ -1,5 +1,5 @@
 <?php
-require 'header.php';
+require_once 'header.php';
 $shipping_num = $_GET['reprintlabel'];
 $rotate_label_image = "rotate" . $shipping_num . ".gif";
 ?>

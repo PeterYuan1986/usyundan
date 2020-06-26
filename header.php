@@ -1,11 +1,10 @@
 <?php
+
 //UPS 相关信息
 $access = "1D7F00B3B06A9135";   //UPC ACCESS
 $userid = "elephxp";            //UPS USER ID
 $passwd = "ABC123efg@";         //UPS USER PWD
 $developmodel = "test";         //"prod" or "test" model
-
-
 //服务器相关信息
 $servername = "localhost";
 $username = "root";
@@ -50,11 +49,8 @@ function lookup_info($orderid) {
 
 //返回当前汇率
 function get_m2rate() {
-    global $conn;
-    $sql = "SELECT rate FROM m2rate ORDER BY id DESC LIMIT 1";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_array($result);
-    return $row[0];
+    require_once 'm2rate.php';
+    return $m2rate+0.02;
 }
 
 //设置汇率
@@ -80,7 +76,7 @@ function genorder($price, $cost, $info) {
 
 //删除订单
 function deleteorder($orderid) {
-    $sql = "DELETE FROM " . $tablename . " WHERE " . $column_orderid . "=" . $orderid;            
+    $sql = "DELETE FROM " . $tablename . " WHERE " . $column_orderid . "=" . $orderid;
     $result = mysqli_query($conn, $sql);
     return $result;
 }
