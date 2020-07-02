@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php';
+require_once 'ydheader.php';
 if (isset($_GET['xl'])) {
     session_id(decode($_GET['xl']));
 }

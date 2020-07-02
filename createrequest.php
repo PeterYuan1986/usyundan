@@ -1,5 +1,5 @@
 <?php
-require_once'header.php';
+require_once'ydheader.php';
 session_start();
 session_regenerate_id(FALSE);
 $_SESSION['discard_after'] =time() + 10000;

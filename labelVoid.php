@@ -1,7 +1,7 @@
 
 <?php
 
-require_once 'header.php';
+require_once 'ydheader.php';
 $shipping_num = $_GET['voidlabel'];
 ?>
 <?php

@@ -9,7 +9,7 @@
  * @copyright 重庆迅虎网络有限公司
  */
 require_once 'api.php';
-require_once "../header.php";
+require_once "../ydheader.php";
 startSID();
 /**
  * 回调数据
@@ -22,8 +22,9 @@ startSID();
   'status'=>'OD'//订单状态，OD已支付，WP未支付
  *   )
  */
-$appid = '2147483647'; //测试账户，仅支持一元内支付    
-$appsecret = '160130736b1ac0d54ed7abe51e44840b'; //测试账户，仅支持一元内支付
+//支付平台账户密码
+$appid = '201906129696'; 
+$appsecret = 'b24f797cfff12c0aadff9b6ce4169bd2'; 
 $my_plugin_id = 'my-plugins-id';
 
 $data = $_POST;

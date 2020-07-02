@@ -1,5 +1,5 @@
 <?php
-require_once 'header.php';
+require_once 'ydheader.php';
 
 if (isset($_GET['id'])) {
     $OID = ($_GET['id']);
@@ -88,8 +88,8 @@ function processShipment($SHIP_REQUEST) {
     $paymentinformation['ShipmentCharge'] = $shipmentcharge;
     $shipment['PaymentInformation'] = $paymentinformation;
 
-    $service['Code'] = $SHIP_REQUEST['SERVICE'];
-    $service['Description'] = 'Expedited';
+    $service['Code'] = $SHIP_REQUEST['SERVICE']['Code'];
+    $service['Description'] = $SHIP_REQUEST['SERVICE']['Description'];
     $shipment['Service'] = $service;
 
     $internationalForm['FormType'] = '01';

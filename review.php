@@ -1,117 +1,118 @@
 <?php
-require_once 'header.php';
+require_once 'ydheader.php';
 startSID();
 check_session_expiration();
 $QUOTE_REQUEST = $_SESSION['CHECK']['SHIP_REQUEST'];
 $price = round($QUOTE_REQUEST['COST'] * get_m2rate(),2);
 $cost = $QUOTE_REQUEST['ORIGINALCOST'];
-$info = json_encode($QUOTE_REQUEST);
-
-$trade_order_id = genorder($price, $cost, $info); //新建订单ID
-
 switch ($QUOTE_REQUEST['SERVICE']['Code']) {
     case "01": {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Next Day Air";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Next Day Air";
             break;
         }
     case "02" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS 2nd Day Air";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS 2nd Day Air";
             break;
         }
     case "03" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Ground";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Ground";
 
             break;
         }
     case "12" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS 3 Day Select";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS 3 Day Select";
 
             break;
         }
     case "13" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Next Day Air Saver";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Next Day Air Saver";
 
             break;
         }
     case "14" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Next Day Air Early";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Next Day Air Early";
 
             break;
         }
     case "59" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS 2nd Day Air A.M.";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS 2nd Day Air A.M.";
 
             break;
         }
     case "07" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Worldwide Express";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Worldwide Express";
 
             break;
         }
     case "08" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS 2nd Day Air";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS 2nd Day Air";
 
             break;
         }
     case "11": {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Standard";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Standard";
 
             break;
         }
     case "54" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "Worldwide Express Plus";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "Worldwide Express Plus";
 
             break;
         }
     case "65" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS 2nd Day Air";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS 2nd Day Air";
 
             break;
         }
     case "96" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Worldwide Express Freight";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Worldwide Express Freight";
 
             break;
         }
     case "71" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS Worldwide Express Freight Midday";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Worldwide Express Freight Midday";
 
             break;
         }
     case "92" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS SurePost Less than 1LB";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS SurePost Less than 1LB";
 
             break;
         }
     case "93" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS SurePost 1LB or greater";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS SurePost 1LB or greater";
 
             break;
         }
     case "94" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS SurePost BPM";
-
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS SurePost BPM";
+                                     
             break;
         }
     case "95" : {
-            $QUOTE_REQUEST['SERVICE']['Descripsion'] = "UPS SurePost Media Mail";
+            $QUOTE_REQUEST['SERVICE']['Description'] = "UPS SurePost Media Mail";
 
             break;
         }
 }
+$info = json_encode($QUOTE_REQUEST);
+
+$trade_order_id = genorder($price, $cost, $info); //新建订单ID
+
+
 ?>
 <?php 
 if(isset($_REQUEST['ok'])){
    $_SESSION['CONFIRM']['SHIP_REQUEST']= $QUOTE_REQUEST ;
    $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['SID']=$trade_order_id;
    $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['PRICE']=$price;
-    header('Location:' . $review_to. encode(session_id()));
+    header('Location:' . $review_to.encode(session_id())   );   // 
         exit;
 }
 
 if(isset($_REQUEST['no'])){    
     deleteorder($trade_order_id);
-    header('Location:' . $addressValidation_to . encode(session_id()));
+    header('Location:' . $addressValidation_to .encode(session_id()) );         
         exit;
 }
 
@@ -126,7 +127,7 @@ if(isset($_REQUEST['no'])){
 
         <div><h3>订单号：<?php print $trade_order_id; ?></h3></div>
 
-        <div><h3><?php print $QUOTE_REQUEST['SERVICE']['Descripsion']; ?></h3></div>
+        <div><h3><?php print $QUOTE_REQUEST['SERVICE']['Description']; ?></h3></div>
         
         <div><h3>预计送达时间（工作日）：<?php ($QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit']=='')?print 'N/A':print $QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit']; ?></h3></div>
         
