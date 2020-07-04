@@ -23,8 +23,8 @@ startSID();
  *   )
  */
 //支付平台账户密码
-$appid = '201906129696'; 
-$appsecret = 'b24f797cfff12c0aadff9b6ce4169bd2'; 
+$appid = '201906129696';
+$appsecret = 'b24f797cfff12c0aadff9b6ce4169bd2';
 $my_plugin_id = 'my-plugins-id';
 
 $data = $_POST;
@@ -56,7 +56,9 @@ if ($data['hash'] != $hash) {
 $trade_order_id = $data['trade_order_id'];
 
 if ($data['status'] == 'OD') {
-    updateorder_transaction_id($data['trade_order_id'], $data['trade_order_id']);
+    while ($data['transaction_id']) {
+        updateorder_transaction_id($data['trade_order_id'], $data['transaction_id']);
+    }
     updateorder_status($data['trade_order_id'], "YF");
     /*     * **********商户业务处理***************** */
     //TODO:此处处理订单业务逻辑,支付平台会多次调用本接口(防止网络异常导致回调失败等情况)
@@ -64,13 +66,13 @@ if ($data['status'] == 'OD') {
     //     if(订单未处理){
     //         处理订单....
     //      }
-    print "<script>windows.open('../paid_printlabel.php?id=" . $data['trade_order_id'] . "');</scrtip>";     
+    print "<script>windows.open('../paid_printlabel.php?id=" . $data['trade_order_id'] . "');</scrtip>";
     //....
     //...
     /*     * ***********商户业务处理 END**************** */
 } else {
     //处理未支付的情况
-    updateorder_transaction_id($data['trade_order_id'], $data['trade_order_id']);
+    updateorder_transaction_id($data['trade_order_id'], $data['transaction_id']);
     updateorder_status($data['trade_order_id'], "WF");
     header('Location:' . $addressValidation_to . encode($SID));
     /* PD: 新建订单ID，状态PENDING

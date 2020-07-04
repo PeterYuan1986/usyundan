@@ -32,7 +32,7 @@ $data = array(
     'trade_order_id' => $trade_order_id, //必须的，网站订单ID，唯一的，匹配[a-zA-Z\d\-_]+
     'payment' => 'wechat', //必须的，支付接口标识：wechat(微信接口)|alipay(支付宝接口)
     'total_fee' => ($developmodel == "test")?'0.01':$price, //人民币，单位精确到分(测试账户只支持0.1元内付款)
-    'title' => $QUOTE_REQUEST['SERVICE']['Descripsion'], //必须的，订单标题，长度32或以内
+    'title' => $QUOTE_REQUEST['SERVICE']['Description'], //必须的，订单标题，长度32或以内
     'time' => time(), //必须的，当前时间戳，根据此字段判断订单请求是否已超时，防止第三方攻击服务器
     'notify_url' => 'http://www.unihorn.tech/ups/pay/notify.php?id='.$trade_order_id, //必须的，支付成功异步回调接口
     'return_url' => 'http://www.unihorn.tech/ups/paid_printlabel.php?id='.$trade_order_id, //必须的，支付成功后的跳转地址

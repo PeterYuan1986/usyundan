@@ -3,8 +3,10 @@ require_once 'ydheader.php';
 startSID();
 check_session_expiration();
 $QUOTE_REQUEST = $_SESSION['CHECK']['SHIP_REQUEST'];
-$price = round($QUOTE_REQUEST['COST'] * get_m2rate(),2);
+
+$price = round($QUOTE_REQUEST['COST'] * intval(get_m2rate() * 10 + 2) / 10, 2);
 $cost = $QUOTE_REQUEST['ORIGINALCOST'];
+
 switch ($QUOTE_REQUEST['SERVICE']['Code']) {
     case "01": {
             $QUOTE_REQUEST['SERVICE']['Description'] = "UPS Next Day Air";
@@ -86,7 +88,7 @@ switch ($QUOTE_REQUEST['SERVICE']['Code']) {
         }
     case "94" : {
             $QUOTE_REQUEST['SERVICE']['Description'] = "UPS SurePost BPM";
-                                     
+
             break;
         }
     case "95" : {
@@ -96,27 +98,21 @@ switch ($QUOTE_REQUEST['SERVICE']['Code']) {
         }
 }
 $info = json_encode($QUOTE_REQUEST);
-
-$trade_order_id = genorder($price, $cost, $info); //新建订单ID
-
-
 ?>
-<?php 
-if(isset($_REQUEST['ok'])){
-   $_SESSION['CONFIRM']['SHIP_REQUEST']= $QUOTE_REQUEST ;
-   $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['SID']=$trade_order_id;
-   $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['PRICE']=$price;
-    header('Location:' . $review_to.encode(session_id())   );   // 
-        exit;
+<?php
+if (isset($_REQUEST['ok'])) {
+    $_SESSION['CONFIRM']['SHIP_REQUEST'] = $QUOTE_REQUEST;
+    $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['PRICE'] = $price;
+    $trade_order_id = genorder($price, $cost, $info); //新建订单ID    
+    $_SESSION['CONFIRM']['SHIP_REQUEST']['USYUNDAN']['SID'] = $trade_order_id;
+    header('Location:' . $review_to . encode(session_id()));   // 
+    exit;
 }
 
-if(isset($_REQUEST['no'])){    
-    deleteorder($trade_order_id);
-    header('Location:' . $addressValidation_to .encode(session_id()) );         
-        exit;
+if (isset($_REQUEST['no'])) {
+    header('Location:' . $addressValidation_to . encode(session_id()));
+    exit;
 }
-
-
 ?>
 
 <!-- 分割线1 -->
@@ -125,12 +121,12 @@ if(isset($_REQUEST['no'])){
         <!-- 分割线2 -->
         <div><h2>您的订单已经确认！</h2></div>
 
-        <div><h3>订单号：<?php print $trade_order_id; ?></h3></div>
+        <div><h3>订单详情：</h3></div>
 
         <div><h3><?php print $QUOTE_REQUEST['SERVICE']['Description']; ?></h3></div>
-        
-        <div><h3>预计送达时间（工作日）：<?php ($QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit']=='')?print 'N/A':print $QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit']; ?></h3></div>
-        
+
+        <div><h3>预计送达时间（工作日）：<?php ($QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit'] == '') ? print 'N/A' : print $QUOTE_REQUEST['GuaranteedDelivery']['BusinessDaysInTransit']; ?></h3></div>
+
         <div>
             <div></div>
             <table>
@@ -189,13 +185,13 @@ if(isset($_REQUEST['no'])){
         <div><h3>目前网站仅支持微信支付，将以人民币的方式为您结算，实际付款：</h3>
             <h2>￥<?php print $price; ?>
 
-        </h2></div>
-    <div>
-        <form method="post">
-            <input type='submit' name='ok' value='微信支付'>
-            <input type='submit' name='no' value='取消订单'>            
-        </form>
-    </div>
+            </h2></div>
+        <div>
+            <form method="post">
+                <input type='submit' name='ok' value='微信支付'>
+                <input type='submit' name='no' value='取消订单'>            
+            </form>
+        </div>
 
 
 
@@ -203,6 +199,5 @@ if(isset($_REQUEST['no'])){
 
 
 
-    <!-- 分割线3 -->
-</body>
+        <!-- 分割线3 -->
 </html>

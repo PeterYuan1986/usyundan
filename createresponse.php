@@ -178,7 +178,7 @@ foreach ($array['RatedShipment'] as $x) {
     $option = "CHECK" . $x['Service']['Code'];
     if (isset($_REQUEST[$option])) {
         $_SESSION['CHECK']['SHIP_REQUEST'] = $QUOTE_REQUEST;
-        $_SESSION['CHECK']['SHIP_REQUEST']['GuaranteedDelivery']['BusinessDaysInTransit']=$x['GuaranteedDelivery']['BusinessDaysInTransit'];
+        $_SESSION['CHECK']['SHIP_REQUEST']['GuaranteedDelivery']['BusinessDaysInTransit'] = $x['GuaranteedDelivery']['BusinessDaysInTransit'];
         $_SESSION['CHECK']['SHIP_REQUEST']['SERVICE']['Code'] = $x['Service']['Code'];
         $_SESSION['CHECK']['SHIP_REQUEST']['COST'] = adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']);
         $_SESSION['CHECK']['SHIP_REQUEST']['ORIGINALCOST'] = $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue'];
@@ -254,7 +254,7 @@ function adjust_price($orignal, $cost) {
         </div>        
         <div>
             <h1></h1>      
-            
+
         </div>
         <div>
             <form action="#" method="get" name="form">
@@ -267,7 +267,7 @@ function adjust_price($orignal, $cost) {
                         <th>实收（美元）</th>                                      
                         <th></th>
                     </tr>
-                    
+
                     <?php
                     foreach ($array['RatedShipment'] as $x) {
                         print "<tr>";
@@ -348,8 +348,8 @@ function adjust_price($orignal, $cost) {
                         print("<td>" . $x['BillingWeight']['Weight'] . " </td>");
 
                         if (@$x['GuaranteedDelivery']['BusinessDaysInTransit'] > 0) {
-                            print("<td>"); 
-                            @$x['GuaranteedDelivery']['BusinessDaysInTransit']===NULL?print 'N/A':print $x['GuaranteedDelivery']['BusinessDaysInTransit']; 
+                            print("<td>");
+                            @$x['GuaranteedDelivery']['BusinessDaysInTransit'] === NULL ? print 'N/A' : print $x['GuaranteedDelivery']['BusinessDaysInTransit'];
                             print ("</td>");
                         } else
                             print("<td></td>");
@@ -365,7 +365,7 @@ function adjust_price($orignal, $cost) {
             </form>
             <a href="createrequest.php">返回上一级</a>
         </div>
-        
+
         <!-- 分割线3 -->
 
     </body>   

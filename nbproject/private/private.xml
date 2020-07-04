@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/pay.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/pay/notify.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/createresponse.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/createrequest.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/ydheader.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/review.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/template.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/paid_printlabel.php</file>
+            <file>file:/C:/XAMPP/htdocs/usyundan/labelRecovery.php</file>
+        </group>
     </open-files>
 </project-private>

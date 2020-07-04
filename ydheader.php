@@ -44,7 +44,7 @@ function lookup_info($orderid) {
     $sql = "SELECT info FROM " . $tablename . " WHERE " . $column_orderid . "='" . $orderid . "'";
     $result = mysqli_query($conn, $sql);
     $row = mysqli_fetch_array($result);
-    return json_decode($row[0]);
+    return json_decode($row[0],TRUE);
 }
 
 //返回当前汇率

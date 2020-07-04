@@ -11,8 +11,8 @@ $SHIP_REQUEST = $quest;
 $price = $row[$column_price];
 $status = $row[$column_status];
 $time = $row[$column_time];
-$tid = $row[$column_tid];
-$tracking_number = $row[$column_tracking_number];
+while($row[$column_tid]==''){
+$tid = $row[$column_tid];}
 ?>
 
 <?php
@@ -265,7 +265,7 @@ try {
         <h4>支付时间：<?php print $time;?></h4>
         <h4>订单号：<?php print $OID;    ?></h4>
         <h4>交易流水号：<?php print $tid;?></h4>        
-        <h4>快递单号：<?php print $tracking_number;?></h4>
+        <h4>快递单号：<?php print $shipping_num;?></h4>
         <button type="button" onclick="window.open('<?php print "./label/" . $HTMLImage; ?>')">
             PDF</button>
         <button type="button" onclick="window.open('<?php print "./label/" . $rotate_label_image; ?>')">
