@@ -5,14 +5,14 @@ if (isset($_GET['id'])) {
     $OID = ($_GET['id']);
 }
 
-$row= getorder_allinfo($OID);
-$quest= json_decode($row[$column_info],TRUE);//从数据库里的info提取信息
+$row = getorder_allinfo($OID);
+$quest = json_decode($row[$column_info], TRUE); //从数据库里的info提取信息
 $SHIP_REQUEST = $quest;
 $price = $row[$column_price];
 $status = $row[$column_status];
 $time = $row[$column_time];
-while($row[$column_tid]==''){
-$tid = $row[$column_tid];}
+while ($row[$column_tid] == '') {}
+$tid = $row[$column_tid];   
 ?>
 
 <?php
@@ -262,10 +262,10 @@ try {
     <body>
         <!-- 分割线2 -->
         <h1>支付成功！</h1>
-        <h4>支付时间：<?php print $time;?></h4>
-        <h4>订单号：<?php print $OID;    ?></h4>
-        <h4>交易流水号：<?php print $tid;?></h4>        
-        <h4>快递单号：<?php print $shipping_num;?></h4>
+        <h4>支付时间：<?php print $time; ?></h4>
+        <h4>订单号：<?php print $OID; ?></h4>
+        <h4>交易流水号：<?php print $tid; ?></h4>        
+        <h4>快递单号：<?php print $shipping_num; ?></h4>
         <button type="button" onclick="window.open('<?php print "./label/" . $HTMLImage; ?>')">
             PDF</button>
         <button type="button" onclick="window.open('<?php print "./label/" . $rotate_label_image; ?>')">
