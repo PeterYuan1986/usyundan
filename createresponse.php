@@ -270,95 +270,98 @@ function adjust_price($orignal, $cost) {
 
                     <?php
                     foreach ($array['RatedShipment'] as $x) {
-                        print "<tr>";
-                        switch ($x['Service']['Code']) {
-                            case "01": {
-                                    print("<td> UPS Next Day Air </td>");
-                                    break;
-                                }
-                            case "02" : {
-                                    print(" <td> UPS 2nd Day Air </td>");
-                                    break;
-                                }
-                            case "03" : {
-                                    print(" <td> UPS Ground </td>");
-                                    break;
-                                }
-                            case "12" : {
-                                    print(" <td> UPS 3 Day Select </td>");
-                                    break;
-                                }
-                            case "13" : {
-                                    print(" <td> UPS Next Day Air Saver </td>");
-                                    break;
-                                }
-                            case "14" : {
-                                    print(" <td> UPS Next Day Air Early </td>");
-                                    break;
-                                }
-                            case "59" : {
-                                    print(" <td> 2nd Day Air A.M.</td>");
-                                    break;
-                                }
-                            case "07" : {
-                                    print(" <td> Worldwide Express </td>");
-                                    break;
-                                }
-                            case "08" : {
-                                    print(" <td> Worldwide Expedited </td>");
-                                    break;
-                                }
-                            case "11": {
-                                    print(" <td> Standard </td>");
-                                    break;
-                                }
-                            case "54" : {
-                                    print(" <td> Worldwide Express Plus </td>");
-                                    break;
-                                }
-                            case "65" : {
-                                    print(" <td> Saver </td>");
-                                    break;
-                                }
-                            case "96" : {
-                                    print(" <td> UPS Worldwide Express Freight </td>");
-                                    break;
-                                }
-                            case "71" : {
-                                    print("<td> UPS Worldwide Express Freight Midday</td>");
-                                    break;
-                                }
-                            case "92" : {
-                                    print("<td> UPS SurePost Less than 1LB</td>");
-                                    break;
-                                }
-                            case "93" : {
-                                    print("<td> UPS SurePost 1LB or greater</td>");
-                                    break;
-                                }
-                            case "94" : {
-                                    print("<td> UPS SurePost BPM</td>");
-                                    break;
-                                }
-                            case "95" : {
-                                    print("<td> UPS SurePost Media Mail</td>");
-                                    break;
-                                }
-                        }
-                        print("<td>" . $x['BillingWeight']['Weight'] . " </td>");
+                        $ourprice=adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) ;
+                        if ($x['TotalCharges']['MonetaryValue'] > $ourprice) {
+                            print "<tr>";
+                            switch ($x['Service']['Code']) {
+                                case "01": {
+                                        print("<td> UPS Next Day Air </td>");
+                                        break;
+                                    }
+                                case "02" : {
+                                        print(" <td> UPS 2nd Day Air </td>");
+                                        break;
+                                    }
+                                case "03" : {
+                                        print(" <td> UPS Ground </td>");
+                                        break;
+                                    }
+                                case "12" : {
+                                        print(" <td> UPS 3 Day Select </td>");
+                                        break;
+                                    }
+                                case "13" : {
+                                        print(" <td> UPS Next Day Air Saver </td>");
+                                        break;
+                                    }
+                                case "14" : {
+                                        print(" <td> UPS Next Day Air Early </td>");
+                                        break;
+                                    }
+                                case "59" : {
+                                        print(" <td> 2nd Day Air A.M.</td>");
+                                        break;
+                                    }
+                                case "07" : {
+                                        print(" <td> Worldwide Express </td>");
+                                        break;
+                                    }
+                                case "08" : {
+                                        print(" <td> Worldwide Expedited </td>");
+                                        break;
+                                    }
+                                case "11": {
+                                        print(" <td> Standard </td>");
+                                        break;
+                                    }
+                                case "54" : {
+                                        print(" <td> Worldwide Express Plus </td>");
+                                        break;
+                                    }
+                                case "65" : {
+                                        print(" <td> Saver </td>");
+                                        break;
+                                    }
+                                case "96" : {
+                                        print(" <td> UPS Worldwide Express Freight </td>");
+                                        break;
+                                    }
+                                case "71" : {
+                                        print("<td> UPS Worldwide Express Freight Midday</td>");
+                                        break;
+                                    }
+                                case "92" : {
+                                        print("<td> UPS SurePost Less than 1LB</td>");
+                                        break;
+                                    }
+                                case "93" : {
+                                        print("<td> UPS SurePost 1LB or greater</td>");
+                                        break;
+                                    }
+                                case "94" : {
+                                        print("<td> UPS SurePost BPM</td>");
+                                        break;
+                                    }
+                                case "95" : {
+                                        print("<td> UPS SurePost Media Mail</td>");
+                                        break;
+                                    }
+                            }
+                            print("<td>" . $x['BillingWeight']['Weight'] . " </td>");
 
-                        if (@$x['GuaranteedDelivery']['BusinessDaysInTransit'] > 0) {
-                            print("<td>");
-                            @$x['GuaranteedDelivery']['BusinessDaysInTransit'] === NULL ? print 'N/A' : print $x['GuaranteedDelivery']['BusinessDaysInTransit'];
-                            print ("</td>");
-                        } else
-                            print("<td></td>");
-                        print("<td>$" . $x['TotalCharges']['MonetaryValue'] . "</td>");
-                        print("<td>$" . adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) . "</td>");
-                        ?>
-                        <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>'  type="submit" > 确认 </button> </td>
-                        </tr>
-                        <?php
+                            if (@$x['GuaranteedDelivery']['BusinessDaysInTransit'] > 0) {
+                                print("<td>");
+                                @$x['GuaranteedDelivery']['BusinessDaysInTransit'] == '' ? print 'N/A' : print $x['GuaranteedDelivery']['BusinessDaysInTransit'];
+                                print ("</td>");
+                            } else
+                                print("<td></td>");
+                            print("<td>$" . $x['TotalCharges']['MonetaryValue'] . "</td>");
+                            print("<td>$" . adjust_price($x['TotalCharges']['MonetaryValue'], $x['NegotiatedRateCharges']['TotalCharge']['MonetaryValue']) . "</td>");
+                            ?>
+                            <td><button name='<?php print("CHECK" . $x['Service']['Code']); ?>'  type="submit" > 确认 </button> </td>
+                            </tr>
+                            <?php
+                        }
                     }
                     ?>      
                 </table>
