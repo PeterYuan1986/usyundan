@@ -59,7 +59,7 @@ function processRate($QUOTE_REQUEST) {
     $shipfrom['Address'] = $addressFrom;
     $shipment['ShipFrom'] = $shipfrom;
 
-    $service['Code'] = '03';
+    $service['Code'] = 'M3';
     $service['Description'] = 'Service Code';
     $shipment['Service'] = $service;
 

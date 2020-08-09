@@ -20,6 +20,7 @@ if (isset($_REQUEST['quote'])) {
     $_SESSION['AV']['SHIP_REQUEST']['weight'] = @$_POST["weight"];
     $_SESSION['AV']['SHIP_REQUEST']['phonefrom'] = @$_POST["phonefrom"];
     $_SESSION['AV']['SHIP_REQUEST']['phoneto'] = @$_POST["phoneto"];
+    $_SESSION['AV']['SHIP_REQUEST']['phoneto'] = @$_POST["message"];
     if (@$_POST["length"] == '') {
         $_SESSION['AV']['SHIP_REQUEST']['length'] = '1';
     } else {
@@ -152,6 +153,18 @@ if (isset($_REQUEST['quote'])) {
                 </div>
 
             </div>
+            <div>
+                <br><br><br>
+            </div>
+            <div>Message:
+                <div>
+                    <label >Customer Message(Shown on label):</label>
+                    <input name="message" type="text"  title="Message"   >
+                </div>
+                
+
+            </div>
+            
             <div >
                 <a href="#"><input type="submit" name="quote" value="Quote">  </a>
             </div>

@@ -11,8 +11,10 @@ $SHIP_REQUEST = $quest;
 $price = $row[$column_price];
 $status = $row[$column_status];
 $time = $row[$column_time];
-while ($row[$column_tid] == '') {}
-$tid = $row[$column_tid];   
+while ($row[$column_tid] == '') {
+    
+}
+$tid = $row[$column_tid];
 ?>
 
 <?php
@@ -30,7 +32,7 @@ function processShipment($SHIP_REQUEST) {
     //create soap request
     $requestoption['RequestOption'] = 'nonvalidate';
     $request['Request'] = $requestoption;
-    $shipment['Description'] = '';
+    $shipment['Description'] = 'USYUNDAN';
     $shipper['Name'] = $SHIP_REQUEST['namefrom'];
     $shipper['AttentionName'] = $SHIP_REQUEST['namefrom'];
     $shipper['TaxIdentificationNumber'] = '';
@@ -73,7 +75,7 @@ function processShipment($SHIP_REQUEST) {
     $shipment['ShipFrom'] = $shipfrom;
 
     $shipmentcharge['Type'] = '01';
-    $creditcard['Type'] = '06';
+    /*$creditcard['Type'] = '06';
     $creditcard['Number'] = '4716995287640625';
     $creditcard['SecurityCode'] = '864';
     $creditcard['ExpirationDate'] = '12/2013';
@@ -82,8 +84,8 @@ function processShipment($SHIP_REQUEST) {
     $creditCardAddress['StateProvinceCode'] = 'GA';
     $creditCardAddress['PostalCode'] = '30076';
     $creditCardAddress['CountryCode'] = 'US';
-    $creditcard['Address'] = $creditCardAddress;
-    $billshipper['CreditCard'] = $creditcard;
+    $creditcard['Address'] = $creditCardAddress;*/
+    $billshipper['AccountNumber'] = '86F304';    
     $shipmentcharge['BillShipper'] = $billshipper;
     $paymentinformation['ShipmentCharge'] = $shipmentcharge;
     $shipment['PaymentInformation'] = $paymentinformation;
@@ -159,6 +161,13 @@ function processShipment($SHIP_REQUEST) {
     $packageweight['UnitOfMeasurement'] = $unit2;
     $packageweight['Weight'] = $SHIP_REQUEST['weight'];
     $package['PackageWeight'] = $packageweight;
+    if ($SHIP_REQUEST['message'] != '') {
+        $referenceNumber[1]['Code'] = '';
+        $referenceNumber[1]['Value'] = $SHIP_REQUEST['message'];
+    }
+    $referenceNumber[0]['Code'] = 'ST';
+    $referenceNumber[0]['Value'] = 'www.usyundan.com';
+    $package['ReferenceNumber'] = $referenceNumber;
     $shipment['Package'] = $package;
 
 
